@@ -1,5 +1,8 @@
 import type { MessageWithStatusResponse } from "@/types/messages";
 import type { PaginatedResponse } from "@/types/pagination";
+
+
+
 export async function getMessages({
 	phoneNumber,
 	page = 1,
@@ -14,9 +17,8 @@ export async function getMessages({
 	const config = useRuntimeConfig();
 
 	return await $fetch<PaginatedResponse<MessageWithStatusResponse>>(
-		"/messages",
+		`${config.public.apiBase}/messages`,
 		{
-			baseURL: config.public.apiBase,
 			params: {
 				phone_number: phoneNumber,
 				page,
