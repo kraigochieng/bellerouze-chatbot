@@ -127,9 +127,12 @@ const rows = computed(
 			statuses: msg.statuses,
 		})) ?? []
 );
+
+const config = useRuntimeConfig();
 </script>
 
 <template>
+	<p>{{ config.public.apiBase }}</p>
 	<div class="p-6">
 		<ULink to="/phone">Phone</ULink>
 		<h1 class="text-2xl font-bold mb-4">📩 Stored Messages</h1>
