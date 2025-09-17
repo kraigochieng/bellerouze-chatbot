@@ -4,12 +4,15 @@ import type { PaginatedResponse } from "@/types/pagination"; // 👈 import your
 import { getMessages } from "@@/api/messages";
 import type { TableColumn } from "@nuxt/ui";
 import { useQuery } from "@tanstack/vue-query";
+import lodash from "lodash";
 import { ref } from "vue";
 const phoneNumber = ref<string | undefined>(undefined);
 const page = ref(1);
 const size = ref(20);
 const sizes = ref([10, 20, 50]);
-import { capitalize } from "lodash";
+
+const { capitalize } = lodash;
+
 const {
 	data: messages,
 	error,
