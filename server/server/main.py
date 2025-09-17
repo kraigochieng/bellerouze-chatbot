@@ -221,8 +221,8 @@ async def get_messages_with_statuses(
             parsed_output = parse_reply_message(output, reply_text)
 
             parsed_statuses = []
-            for status in statuses:
-                parsed_status = parse_status(status)
+            for status_item in statuses:
+                parsed_status = parse_status(status_item)
                 parsed_statuses.append(parsed_status)
 
             parsed.append(
