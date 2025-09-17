@@ -24,6 +24,9 @@ class Settings(BaseSettings):
     mongo_port: str
     mongo_uri: str
 
+    server_url: str
+    client_url: str
+    
     environment: str
 
     model_config = SettingsConfigDict(env_file=ENV_FILE, extra="allow")
