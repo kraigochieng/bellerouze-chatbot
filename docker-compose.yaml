@@ -6,8 +6,6 @@ services:
             - "${CLIENT_PORT}:3000"
         depends_on:
             - server
-        # environment:
-        #     API_URL: "http://${SERVER_HOST}:${SERVER_PORT}"
         env_file:
             - .env
         networks:
@@ -18,8 +16,6 @@ services:
         image: ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPONAME}_server:latest
         ports:
             - "${SERVER_PORT}:8000"
-        # environment:
-        #     MONGO_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/bellerouze_chatbot
         depends_on:
             - mongodb
         env_file:
