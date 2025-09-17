@@ -7,8 +7,9 @@ ifneq (,$(wildcard .env))
 endif
 
 # Docker images
-CLIENT_IMAGE := $(DOCKERHUB_USERNAME)/$(DOCKERHUB_REPONAME)_client:latest
-SERVER_IMAGE := $(DOCKERHUB_USERNAME)/$(DOCKERHUB_REPONAME)_server:latest
+CLIENT_IMAGE := $(DOCKERHUB_USERNAME)/$(DOCKERHUB_REPONAME)_client
+SERVER_IMAGE := $(DOCKERHUB_USERNAME)/$(DOCKERHUB_REPONAME)_server
+DATE_TAG := $(shell date +%Y%m%d%H%M%S)
 
 .PHONY: all docker-volumes docker-network docker-build docker-push
 
@@ -17,12 +18,15 @@ all: docker-volumes docker-network docker-build docker-push
 
 # Build both client and server images
 docker-build:
-	docker compose build
+	docker build ./client -t $(CLIENT_IMAGE):latest -t $(CLIENT_IMAGE):$(DATE_TAG)
+	docker build ./server -t $(SERVER_IMAGE):latest -t $(SERVER_IMAGE):$(DATE_TAG)
 
 # Push both images to Docker Hub
 docker-push:
-	docker push $(CLIENT_IMAGE)
-	docker push $(SERVER_IMAGE)
+	docker push $(CLIENT_IMAGE):latest
+	docker push $(CLIENT_IMAGE):$(DATE_TAG)
+	docker push $(SERVER_IMAGE):latest
+	docker push $(SERVER_IMAGE):$(DATE_TAG)
 
 
 docker-volumes:
