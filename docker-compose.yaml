@@ -1,6 +1,7 @@
 services:
     client:
         build: ./client
+        image: ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPONAME}_client:latest
         ports:
             - "${CLIENT_PORT}:3000"
         depends_on:
@@ -14,6 +15,7 @@ services:
 
     server:
         build: ./server
+        image: ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPONAME}_server:latest
         ports:
             - "${SERVER_PORT}:8000"
         # environment:
