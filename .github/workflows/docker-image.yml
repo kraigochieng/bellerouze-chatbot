@@ -1,0 +1,35 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      - name: Set timestamp
+        id: vars
+        run: echo "TAG=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+
+      - name: Build and push server image
+        run: |
+          docker build ./server -t ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_server:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_server:${TAG}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_server:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_server:${TAG}
+
+      - name: Build and push client image
+        run: |
+          docker build ./client -t ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_client:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_client:${TAG}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_client:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_client:${TAG}
+
