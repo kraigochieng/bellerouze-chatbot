@@ -1,28 +1,45 @@
 services:
-    # chatbot:
-    #     build: .
-    #     ports:
-    #         - "8000:8000"
-    #     env_file:
-    #         - .env
-    #     depends_on:
-    #         - mongodb
+    client:
+        build: ./client
+        ports:
+            - "${CLIENT_PORT}:3000"
+        depends_on:
+            - server
+        # environment:
+        #     API_URL: "http://${SERVER_HOST}:${SERVER_PORT}"
+        env_file:
+            - .env
+        networks:
+            - bellerouze_chatbot_network
+
+    server:
+        build: ./server
+        ports:
+            - "${SERVER_PORT}:8000"
+        # environment:
+        #     MONGO_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/bellerouze_chatbot
+        depends_on:
+            - mongodb
+        env_file:
+            - .env
+        networks:
+            - bellerouze_chatbot_network
 
     mongodb:
         image: mongo:7
         restart: always
-        env_file:
-            - .env
         ports:
             - "${MONGO_PORT}:27017"
         volumes:
-            - mongodb_data:/data/db
+            - bellerouze_chatbot_mongodb_data:/data/db
+        env_file:
+            - .env
+        networks:
+            - bellerouze_chatbot_network
 
     mongo-express:
         image: mongo-express:1.0.2-20
         restart: always
-        env_file:
-            - .env
         ports:
             - "${MONGOEXPRESS_PORT}:8081"
         environment:
@@ -33,6 +50,15 @@ services:
             ME_CONFIG_BASICAUTH_PASSWORD: ${MONGOEXPRESS_PASSWORD}
         depends_on:
             - mongodb
+        env_file:
+            - .env
+        networks:
+            - bellerouze_chatbot_network
 
 volumes:
-    mongodb_data:
+    bellerouze_chatbot_mongodb_data:
+        external: true
+
+networks:
+    bellerouze_chatbot_network:
+        external: true
