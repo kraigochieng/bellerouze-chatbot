@@ -9,9 +9,7 @@ export default defineNuxtConfig({
 	runtimeConfig: {
 		public: {
 			// apiBase: "http://localhost:8000",
-			apiBase: `http://${process.env.SERVER_HOST || "localhost"}:${
-				process.env.SERVER_PORT || 8000
-			}`,
+			apiBase: `${process.env.SERVER_URL || "http://localhost:8000"}`,
 		},
 	},
 
