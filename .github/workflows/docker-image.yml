@@ -33,10 +33,19 @@ jobs:
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_client:latest
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_client:${TAG}
 
-      - name: Deploy the app
+      - name: Deploy server app
         uses: digitalocean/app_action/deploy@v2
         env:
           SAMPLE_DIGEST: ${{ steps.push.outputs.digest }}
         with:
+          app_name: bellerouze-chatbot-server
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Deploy client app
+        uses: digitalocean/app_action/deploy@v2
+        env:
+          SAMPLE_DIGEST: ${{ steps.push.outputs.digest }}
+        with:
+          app_name: bellerouze-chatbot-client
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
