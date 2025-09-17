@@ -1,0 +1,38 @@
+services:
+    # chatbot:
+    #     build: .
+    #     ports:
+    #         - "8000:8000"
+    #     env_file:
+    #         - .env
+    #     depends_on:
+    #         - mongodb
+
+    mongodb:
+        image: mongo:7
+        restart: always
+        env_file:
+            - .env
+        ports:
+            - "${MONGO_PORT}:27017"
+        volumes:
+            - mongodb_data:/data/db
+
+    mongo-express:
+        image: mongo-express:1.0.2-20
+        restart: always
+        env_file:
+            - .env
+        ports:
+            - "${MONGOEXPRESS_PORT}:8081"
+        environment:
+            ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+            ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+            ME_CONFIG_MONGODB_SERVER: mongodb
+            ME_CONFIG_BASICAUTH_USERNAME: ${MONGOEXPRESS_USERNAME}
+            ME_CONFIG_BASICAUTH_PASSWORD: ${MONGOEXPRESS_PASSWORD}
+        depends_on:
+            - mongodb
+
+volumes:
+    mongodb_data:

@@ -1,0 +1,40 @@
+{
+  "object": "whatsapp_business_account",
+  "entry": [
+    {
+      "id": "746599524843368",
+      "changes": [
+        {
+          "value": {
+            "messaging_product": "whatsapp",
+            "metadata": {
+              "display_phone_number": "254733410104",
+              "phone_number_id": "779532008573600"
+            },
+            "statuses": [
+              {
+                "id": "wamid.HBgMMjU0NzkzNTIwMDUyFQIAERgSMDM5QkVFQTQxOEJEMjI5MDk4AA==",
+                "status": "failed",
+                "timestamp": "1757969676",
+                "recipient_id": "254793520052",
+                "errors": [
+                  {
+                    "code": 131047,
+                    "title": "Re-engagement message",
+                    "message": "Re-engagement message",
+                    "error_data": {
+                      "details": "Message failed to send because more than 24 hours have passed since the customer last replied to this number."
+                    },
+                    "href": "https://developers.facebook.com/docs/whatsapp/cloud-api/support/error-codes/"
+                  }
+                ]
+              }
+            ]
+          },
+          "field": "messages"
+        }
+      ]
+    }
+  ]
+}
+2025-09-15 23:5
