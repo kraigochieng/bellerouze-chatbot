@@ -1,7 +1,9 @@
 import tailwindcss from "@tailwindcss/vite";
 import dotenv from "dotenv";
 
-dotenv.config({ path: "../.env" });
+if (process.env.NODE_ENV === "development") {
+	dotenv.config({ path: "../.env" });
+}
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 	compatibilityDate: "2025-07-15",
@@ -9,7 +11,7 @@ export default defineNuxtConfig({
 	runtimeConfig: {
 		public: {
 			// apiBase: "http://localhost:8000",
-			apiBase: `${process.env.SERVER_URL || "http://localhost:8000"}`,
+			apiBase: process.env.SERVER_URL || "http://localhost:8000",
 		},
 	},
 
