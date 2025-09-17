@@ -3,15 +3,14 @@ import asyncio
 from pymongo import AsyncMongoClient
 from pymongo.server_api import ServerApi
 
-from server.db import mongo_uri
-
+from server.settings import settings
 
 async def main():
     # Replace the placeholder with your Atlas connection string
 
     # Create a MongoClient with a MongoClientOptions object to set the Stable API version
     client = AsyncMongoClient(
-        mongo_uri,
+        settings.mongo_uri,
         server_api=ServerApi(version="1", strict=True, deprecation_errors=True),
     )
 

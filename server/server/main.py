@@ -10,7 +10,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pymongo import MongoClient
 
-from server.db import mongo_uri
 from server.logger import logger
 from server.schemas import MessageWithStatusResponse, PaginatedResponse
 from server.settings import settings
@@ -68,7 +67,7 @@ async def receive_webhook(request: Request):
     # logger.info("🔔 Webhook received:\n{}", json.dumps(data, indent=2))
 
     try:
-        mongo_client = MongoClient(mongo_uri)
+        mongo_client = MongoClient(settings.mongo_uri)
 
         database = mongo_client.get_database("bellerouze_chatbot")
 
@@ -145,7 +144,7 @@ async def get_messages_with_statuses(
     ),
 ):
     try:
-        mongo_client = MongoClient(mongo_uri)
+        mongo_client = MongoClient(settings.mongo_uri)
         database = mongo_client.get_database("bellerouze_chatbot")
         collection = database.get_collection("messages")
 

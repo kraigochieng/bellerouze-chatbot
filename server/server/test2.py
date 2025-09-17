@@ -1,9 +1,11 @@
-from pymongo import MongoClient
 import json
-from server.db import mongo_client
 
-client = MongoClient("mongodb://localhost:27017/")
-db = mongo_client.get_database("bellerouze_chatbot")
+from pymongo import MongoClient
+
+from server.settings import settings
+
+client = MongoClient(settings.mongo_uri)
+db = client.get_database("bellerouze_chatbot")
 
 
 pipeline = [

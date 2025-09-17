@@ -22,6 +22,9 @@ class Settings(BaseSettings):
     mongo_initdb_root_password: str
     mongo_host: str
     mongo_port: str
+    mongo_uri: str
+
+    environment: str
 
     model_config = SettingsConfigDict(env_file=ENV_FILE, extra="allow")
 
