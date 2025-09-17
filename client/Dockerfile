@@ -18,11 +18,15 @@ RUN npm install
 COPY . /app/
 
 # Build
+ENV NODE_ENV=production
 RUN npm run build
 
 # Run with a smaller image
 FROM node:22.17.1-slim AS runner
 WORKDIR /app
+
+ENV NODE_ENV=production
+
 COPY --from=build /app/.output ./.output
 
 EXPOSE 3000
