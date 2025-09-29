@@ -1,51 +1,65 @@
 name: Docker Image CI
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    push:
+        branches: ["main"]
+    pull_request:
+        branches: ["main"]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    build:
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v4
 
-      - name: Log in to Docker Hub
-        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+            - name: Login to Docker Hub
+              uses: docker/login-action@v3
+              with:
+                  username: ${{ secrets.DOCKERHUB_USERNAME }}
+                  password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Set timestamp
-        id: vars
-        run: echo "TAG=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+            - name: Set up QEMU
+              uses: docker/setup-qemu-action@v3
 
-      - name: Build and push server image
-        run: |
-          docker build ./server -t ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_server:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_server:${TAG}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_server:latest
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_server:${TAG}
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3
 
-      - name: Build and push client image
-        run: |
-          docker build ./client -t ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_client:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_client:${TAG}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_client:latest
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_client:${TAG}
+            - name: Set timestamp
+              id: vars
+              run: echo "TAG=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
 
-      - name: Deploy server app
-        uses: digitalocean/app_action/deploy@v2
-        env:
-          SAMPLE_DIGEST: ${{ steps.push.outputs.digest }}
-        with:
-          app_name: bellerouze-chatbot-server
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+            - name: Build and push server image
+              uses: docker/build-push-action@v6
+              with:
+                  context: ./server
+                  push: true
+                  tags: |
+                      ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_server:latest
+                      ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_server:${{ env.TAG }}
 
-      - name: Deploy client app
-        uses: digitalocean/app_action/deploy@v2
-        env:
-          SAMPLE_DIGEST: ${{ steps.push.outputs.digest }}
-        with:
-          app_name: bellerouze-chatbot-client
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+            - name: Build and push client image
+              uses: docker/build-push-action@v6
+              with:
+                  context: ./client
+                  push: true
+                  tags: |
+                      ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_client:latest
+                      ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_client:${{ env.TAG }}
 
+            - name: Deploy server app
+              uses: digitalocean/app_action/deploy@v2
+              env:
+                  SAMPLE_DIGEST: ${{ steps.push.outputs.digest }}
+              with:
+                  app_name: bellerouze-chatbot-server
+                  token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+            - name: Deploy client app
+              uses: digitalocean/app_action/deploy@v2
+              env:
+                  SAMPLE_DIGEST: ${{ steps.push.outputs.digest }}
+              with:
+                  app_name: bellerouze-chatbot-client
+                  token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
