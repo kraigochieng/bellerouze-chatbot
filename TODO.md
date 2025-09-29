@@ -9,6 +9,7 @@
 -   [ ] table counting number of messages sent in total, group by dayss, months
 -   [x] parser functions for messages and status
 -   [ ] deploy with github actions the docker compose to digital ocean
+-   [ ] use a set to have the appropriate number of statuses. or see if inserting a duplicate status will be prevented
 
 ## goal
 
