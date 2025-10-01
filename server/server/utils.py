@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-
+import requests
 import httpx
 from langchain_core.messages import HumanMessage, SystemMessage
 
@@ -238,3 +238,11 @@ async def send_whatsapp_message(phone_number_id: str, payload: dict) -> httpx.Re
         response = await client.post(url, headers=headers, json=payload)
         print(f"📨 Sent to {url} with status {response.status_code}")
         return response
+
+
+def ping_self():
+    try:
+        requests.get(settings.server_url, timeout=5)
+        print("Pinged self ✅")
+    except Exception as e:
+        print("Ping failed ❌", e)

@@ -23,6 +23,8 @@ class Settings(BaseSettings):
     mongo_uri: str
 
     client_url: str
+
+    server_url: str
     
     environment: str
 

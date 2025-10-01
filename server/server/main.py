@@ -1,9 +1,11 @@
 import json
+from contextlib import asynccontextmanager
 from math import ceil
 from typing import List, Literal
 
 import pymongo
 import uvicorn
+from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi import FastAPI, HTTPException, Query, Request, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
@@ -20,10 +22,26 @@ from server.utils import (
     parse_reply_message,
     parse_status,
     parse_whatsapp_webhook,
+    ping_self,
     send_whatsapp_message,
 )
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Start scheduler
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(ping_self, "interval", minutes=5)  # every 10 min
+    scheduler.start()
+    logger.info("Scheduler started")
+
+    yield
+
+    scheduler.shutdown()
+    logger.info("Scheduler stopped")
+
+
+app = FastAPI(lifespan=lifespan)
 
 
 app.add_middleware(
