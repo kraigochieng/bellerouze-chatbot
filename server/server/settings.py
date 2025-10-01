@@ -15,16 +15,13 @@ class Settings(BaseSettings):
     whatsapp_api_version: str
     whatsapp_phone_number_id: str
     whatsapp_verify_token: str
+    
     # Openai
     openai_api_key: str
+    
     # Mongo
-    mongo_initdb_root_username: str
-    mongo_initdb_root_password: str
-    mongo_host: str
-    mongo_port: str
     mongo_uri: str
 
-    server_url: str
     client_url: str
     
     environment: str
