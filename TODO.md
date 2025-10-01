@@ -9,6 +9,8 @@
 
 # In Progress
 
+-   [ ] planning to use vercel for client
+
 # Completed
 
 -   [x] learn more about finding, aggregation, ordering, limiting(paginating) mongo db
