@@ -48,13 +48,13 @@ jobs:
                       ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_client:latest
                       ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_client:${{ env.TAG }}
 
-            - name: Deploy server app
-              uses: digitalocean/app_action/deploy@v2
-              env:
-                  SAMPLE_DIGEST: ${{ steps.push.outputs.digest }}
-              with:
-                  app_name: bellerouze-chatbot-server
-                  token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+            # - name: Deploy server app
+            #   uses: digitalocean/app_action/deploy@v2
+            #   env:
+            #       SAMPLE_DIGEST: ${{ steps.push.outputs.digest }}
+            #   with:
+            #       app_name: bellerouze-chatbot-server
+            #       token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
             # - name: Deploy client app
             #   uses: digitalocean/app_action/deploy@v2
@@ -63,3 +63,8 @@ jobs:
             #   with:
             #       app_name: bellerouze-chatbot-client
             #       token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+            - name: Deploy Server Render Web Service
+              env:
+                  deploy_url: ${{ secrets.RENDER_DEPLOY_SERVER_HOOK_URL }}
+              run: |
+                  curl "$deploy_url"
