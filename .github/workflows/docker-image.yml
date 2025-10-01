@@ -39,14 +39,14 @@ jobs:
                       ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_server:latest
                       ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_server:${{ env.TAG }}
 
-            - name: Build and push client image
-              uses: docker/build-push-action@v6
-              with:
-                  context: ./client
-                  push: true
-                  tags: |
-                      ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_client:latest
-                      ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_client:${{ env.TAG }}
+            # - name: Build and push client image
+            #   uses: docker/build-push-action@v6
+            #   with:
+            #       context: ./client
+            #       push: true
+            #       tags: |
+            #           ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_client:latest
+            #           ${{ secrets.DOCKERHUB_USERNAME }}/bellerouze_chatbot_client:${{ env.TAG }}
 
             # - name: Deploy server app
             #   uses: digitalocean/app_action/deploy@v2
